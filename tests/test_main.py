@@ -1,16 +1,20 @@
 # -----------------------------------------------------------------------------
 # Imports
 # -----------------------------------------------------------------------------
-from importlib.metadata import version  # type: ignore
+import os
 
-from .main import ACAStorage
+import pytest
 
-# -----------------------------------------------------------------------------
-# Version
-# -----------------------------------------------------------------------------
-__version__ = version("acastorage")
+from acastorage import ACAStorage
 
 # -----------------------------------------------------------------------------
-# Public API
+# Tests
 # -----------------------------------------------------------------------------
-__all__ = ["ACAStorage"]
+pytestmark = pytest.mark.asyncio
+
+
+class TestACAStorage:
+    cred = os.getenv("ACASTORAGE_KEY")
+
+    async def test_init(self):
+        assert ACAStorage("test", credential=self.cred)
