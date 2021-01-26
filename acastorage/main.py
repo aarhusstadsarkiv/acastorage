@@ -2,7 +2,6 @@
 # Imports
 # -----------------------------------------------------------------------------
 from typing import Any
-from typing import Optional
 
 from azure.storage.blob.aio import ContainerClient
 
@@ -15,8 +14,7 @@ class ACAStorage(ContainerClient):
     def __init__(
         self,
         container: str,
-        credential: Optional[Any] = None,
-        create: bool = True,
+        credential: Any,
     ) -> None:
         """
         Azure Blob Storage Backend
@@ -26,3 +24,5 @@ class ACAStorage(ContainerClient):
             container,
             credential=credential,
         )
+        # TODO: Implement exists() check when MS adds it, cf.
+        # https://github.com/Azure/azure-sdk-for-python/pull/16315
