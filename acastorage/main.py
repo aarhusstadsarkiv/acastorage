@@ -6,6 +6,8 @@ from typing import Any
 
 from azure.storage.blob.aio import ContainerClient
 
+from acastorage.exceptions import UploadError
+
 # -----------------------------------------------------------------------------
 # Main ACAStorage Class
 # -----------------------------------------------------------------------------
@@ -28,15 +30,29 @@ class ACAStorage(ContainerClient):
         # TODO: Implement exists() check when MS adds it, cf.
         # https://github.com/Azure/azure-sdk-for-python/pull/16315
 
-    async def upload(self, source: Path, dest: Path) -> None:
-        if source.is_dir():
-            pass
-        elif source.is_file():
-            await self.upload_file(source, dest)
+    async def upload_file(self, source: Path, dest: Path = Path(".")) -> None:
+        """Upload source file to a specified destination. The destination
+        is always assumed to be a directory, and defaults to the container
+        root.
 
-    async def upload_file(self, source: Path, dest: Path) -> None:
+        Parameters
+        ----------
+        source : pathlib.Path
+            The source file to upload.
+        dest: pathlib.Path, optional
+            The destination folder to upload to. Defaults to pathlib.Path(".").
+
+        Raises
+        ------
+        OSError
+            If the source is not a file.
+        """
         if not source.is_file():
-            raise ValueError(f"Source {source} must be a file.")
+            raise ValueError(f"Source {source} is not a file.")
 
         with source.open("rb") as data:
-            await self.upload_blob(name=str(dest), data=data)
+            upload_dest = dest / source.name
+            try:
+                await self.upload_blob(name=str(upload_dest), data=data)
+            except Exception as err:
+                raise UploadError(f"Upload of {source} failed with {err}")
