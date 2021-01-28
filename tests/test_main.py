@@ -15,7 +15,7 @@ pytestmark = pytest.mark.asyncio
 
 
 class TestACAStorage:
-    cred = os.getenv("ACASTORAGE_KEY")
+    cred = os.getenv("ACASTORAGE_TOKEN")
 
     async def test_init(self):
         assert ACAStorage("test", credential=self.cred)
@@ -24,4 +24,4 @@ class TestACAStorage:
         test_file: Path = temp_dir / "test.txt"
         test_file.write_text("Testing")
         test_storage = ACAStorage("test", credential=self.cred)
-        await test_storage.upload_file(test_file, Path(".") / test_file.name)
+        await test_storage.upload_file(test_file)
