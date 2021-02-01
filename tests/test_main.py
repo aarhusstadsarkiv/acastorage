@@ -14,6 +14,10 @@ from acastorage import ACAStorage
 pytestmark = pytest.mark.asyncio
 
 
+async def delete(storage: ACAStorage) -> None:
+    await storage.delete_blobs(*[b async for b in storage.list_blobs()])
+
+
 class TestACAStorage:
     cred = os.getenv("ACASTORAGE_TOKEN")
 
@@ -25,6 +29,4 @@ class TestACAStorage:
         test_file.write_text("Testing")
         test_storage = ACAStorage("test", credential=self.cred)
         await test_storage.upload_file(test_file)
-        await test_storage.delete_blob(
-            str(test_file.name), delete_snapshots="include"
-        )
+        await delete(test_storage)
