@@ -25,3 +25,6 @@ class TestACAStorage:
         test_file.write_text("Testing")
         test_storage = ACAStorage("test", credential=self.cred)
         await test_storage.upload_file(test_file)
+        await test_storage.delete_blob(
+            str(test_file.name), delete_snapshots="include"
+        )
