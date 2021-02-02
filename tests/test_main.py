@@ -43,6 +43,9 @@ class TestACAStorage:
         test_storage = ACAStorage("test", credential=self.cred)
         await test_storage.upload_file(test_file, Path("test"))
 
+        # Overwrite True -> No error
+        await test_storage.upload_file(test_file, Path("test"), overwrite=True)
+
         # Overwrite False -> UploadError
         err_match = "The specified blob already exists."
         with pytest.raises(UploadError, match=err_match):
@@ -50,8 +53,6 @@ class TestACAStorage:
                 test_file, Path("test"), overwrite=False
             )
 
-        # Overwrite True -> No error
-        await test_storage.upload_file(test_file, Path("test"), overwrite=True)
         await delete(test_storage)
 
     async def test_file_not_found(self, temp_dir):
@@ -68,7 +69,7 @@ class TestACAStorage:
         # Monkeypatch ContainerClient
         err_msg = "fail"
 
-        async def upload_error(*args, **kwargs):
+        def upload_error(*args, **kwargs):
             raise Exception(err_msg)
 
         monkeypatch.setattr(ContainerClient, "upload_blob", upload_error)
