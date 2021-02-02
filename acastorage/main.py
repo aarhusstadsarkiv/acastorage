@@ -44,11 +44,14 @@ class ACAStorage(ContainerClient):
 
         Raises
         ------
-        OSError
+        FileNotFoundError
             If the source is not a file.
+        UploadError
+            If upload of the file fails. Reraises exceptions from
+            Azure's ContainerClient in a more user-friendly format.
         """
         if not source.is_file():
-            raise ValueError(f"Source {source} is not a file.")
+            raise FileNotFoundError(f"Source {source} is not a file.")
 
         with source.open("rb") as data:
             upload_dest = dest_dir / source.name
