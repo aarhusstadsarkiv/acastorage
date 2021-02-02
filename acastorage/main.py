@@ -30,10 +30,11 @@ class ACAStorage(ContainerClient):
         # TODO: Implement exists() check when MS adds it, cf.
         # https://github.com/Azure/azure-sdk-for-python/pull/16315
 
-    async def upload_file(self, source: Path, dest_dir: Path) -> None:
+    async def upload_file(
+        self, source: Path, dest_dir: Path, overwrite: bool = False
+    ) -> None:
         """Upload source file to a specified destination. The destination
-        is always assumed to be a directory, and defaults to the container
-        root.
+        is always assumed to be a directory.
 
         Parameters
         ----------
@@ -41,6 +42,9 @@ class ACAStorage(ContainerClient):
             The source file to upload.
         dest_dir: pathlib.Path
             The destination folder to upload to.
+        overwrite: bool, optional
+            Whether to overwrite the target file if it exists.
+            Defaults to False.
 
         Raises
         ------
@@ -56,6 +60,8 @@ class ACAStorage(ContainerClient):
         with source.open("rb") as data:
             upload_dest = dest_dir / source.name
             try:
-                await self.upload_blob(name=str(upload_dest), data=data)
+                await self.upload_blob(
+                    name=str(upload_dest), data=data, overwrite=overwrite
+                )
             except Exception as err:
-                raise UploadError(f"Upload of {source} failed with {err}")
+                raise UploadError(f"Upload of {source} failed: {err}")
