@@ -57,11 +57,12 @@ class ACAStorage(ContainerClient):
         if not source.is_file():
             raise FileNotFoundError(f"Source {source} is not a file.")
 
+        blob_name: str = str(dest_dir / source.name)
+        blob_client = self.get_blob_client(blob_name)
         with source.open("rb") as data:
-            upload_dest = dest_dir / source.name
             try:
-                await self.upload_blob(
-                    name=str(upload_dest), data=data, overwrite=overwrite
-                )
+                await blob_client.upload_blob(data=data, overwrite=overwrite)
             except Exception as err:
                 raise UploadError(f"Upload of {source} failed: {err}")
+            finally:
+                await blob_client.close()

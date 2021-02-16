@@ -5,7 +5,7 @@ import os
 from pathlib import Path
 
 import pytest
-from azure.storage.blob.aio import ContainerClient
+from azure.storage.blob.aio import BlobClient
 
 from acastorage import ACAStorage
 from acastorage.exceptions import UploadError
@@ -72,7 +72,7 @@ class TestACAStorage:
         def upload_error(*args, **kwargs):
             raise Exception(err_msg)
 
-        monkeypatch.setattr(ContainerClient, "upload_blob", upload_error)
+        monkeypatch.setattr(BlobClient, "upload_blob", upload_error)
 
         # Init files
         test_file: Path = temp_dir / "test.txt"
