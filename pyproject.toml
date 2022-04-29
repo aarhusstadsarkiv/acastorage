@@ -21,7 +21,7 @@ flake8 = "^3.9.1"
 mypy = "^0.812"
 pytest-dotenv = "^0.5.2"
 pytest-asyncio = "^0.14.0"
-azure-identity = "^1.5.0"
+azure-identity = "^1.10.0"
 azure-keyvault-secrets = "^4.2.0"
 
 [tool.black]
