@@ -50,7 +50,7 @@ optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
 [package.extras]
-dev = ["coverage[toml] (>=5.0.2)", "hypothesis", "pympler", "pytest (>=4.3.0)", "six", "zope.interface", "furo", "sphinx", "pre-commit"]
+dev = ["coverage[toml] (>=5.0.2)", "furo", "hypothesis", "pre-commit", "pympler", "pytest (>=4.3.0)", "six", "sphinx", "zope.interface"]
 docs = ["furo", "sphinx", "zope.interface"]
 tests = ["coverage[toml] (>=5.0.2)", "hypothesis", "pympler", "pytest (>=4.3.0)", "six", "zope.interface"]
 tests_no_zope = ["coverage[toml] (>=5.0.2)", "hypothesis", "pympler", "pytest (>=4.3.0)", "six"]
@@ -188,6 +188,9 @@ category = "dev"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, <4"
 
+[package.dependencies]
+toml = {version = "*", optional = true, markers = "extra == \"toml\""}
+
 [package.extras]
 toml = ["toml"]
 
@@ -204,11 +207,11 @@ cffi = ">=1.12"
 six = ">=1.4.1"
 
 [package.extras]
-docs = ["sphinx (>=1.6.5,!=1.8.0,!=3.1.0,!=3.1.1)", "sphinx-rtd-theme"]
-docstest = ["doc8", "pyenchant (>=1.6.11)", "twine (>=1.12.0)", "sphinxcontrib-spelling (>=4.0.1)"]
+docs = ["sphinx (>=1.6.5,!=1.8.0,!=3.1.0,!=3.1.1)", "sphinx_rtd_theme"]
+docstest = ["doc8", "pyenchant (>=1.6.11)", "sphinxcontrib-spelling (>=4.0.1)", "twine (>=1.12.0)"]
 pep8test = ["black", "flake8", "flake8-import-order", "pep8-naming"]
 ssh = ["bcrypt (>=3.1.5)"]
-test = ["pytest (>=3.6.0,!=3.9.0,!=3.9.1,!=3.9.2)", "pretend", "iso8601", "pytz", "hypothesis (>=1.11.4,!=3.79.2)"]
+test = ["hypothesis (>=1.11.4,!=3.79.2)", "iso8601", "pretend", "pytest (>=3.6.0,!=3.9.0,!=3.9.1,!=3.9.2)", "pytz"]
 
 [[package]]
 name = "flake8"
@@ -282,8 +285,8 @@ python-versions = "*"
 [package.dependencies]
 msal = ">=0.4.1,<2.0.0"
 portalocker = [
-    {version = ">=1.0,<2.0", markers = "platform_system != \"Windows\""},
     {version = ">=1.6,<2.0", markers = "platform_system == \"Windows\""},
+    {version = ">=1.0,<2.0", markers = "platform_system != \"Windows\""},
 ]
 
 [[package]]
@@ -301,7 +304,7 @@ requests = ">=2.16,<3.0"
 requests-oauthlib = ">=0.5.0"
 
 [package.extras]
-async = ["aiohttp (>=3.0)", "aiodns"]
+async = ["aiodns", "aiohttp (>=3.0)"]
 
 [[package]]
 name = "multidict"
@@ -391,7 +394,7 @@ pywin32 = {version = "!=226", markers = "platform_system == \"Windows\""}
 
 [package.extras]
 docs = ["sphinx (>=1.7.1)"]
-tests = ["pytest (>=4.6.9)", "pytest-cov (>=2.8.1)", "sphinx (>=1.8.5)", "pytest-flake8 (>=1.0.5)"]
+tests = ["pytest (>=4.6.9)", "pytest-cov (>=2.8.1)", "pytest-flake8 (>=1.0.5)", "sphinx (>=1.8.5)"]
 
 [[package]]
 name = "py"
@@ -438,9 +441,9 @@ cryptography = {version = ">=3.3.1,<4.0.0", optional = true, markers = "extra ==
 
 [package.extras]
 crypto = ["cryptography (>=3.3.1,<4.0.0)"]
-dev = ["sphinx", "sphinx-rtd-theme", "zope.interface", "cryptography (>=3.3.1,<4.0.0)", "pytest (>=6.0.0,<7.0.0)", "coverage[toml] (==5.0.4)", "mypy", "pre-commit"]
+dev = ["coverage[toml] (==5.0.4)", "cryptography (>=3.3.1,<4.0.0)", "mypy", "pre-commit", "pytest (>=6.0.0,<7.0.0)", "sphinx", "sphinx-rtd-theme", "zope.interface"]
 docs = ["sphinx", "sphinx-rtd-theme", "zope.interface"]
-tests = ["pytest (>=6.0.0,<7.0.0)", "coverage[toml] (==5.0.4)"]
+tests = ["coverage[toml] (==5.0.4)", "pytest (>=6.0.0,<7.0.0)"]
 
 [[package]]
 name = "pyparsing"
@@ -487,18 +490,18 @@ testing = ["async-generator (>=1.3)", "coverage", "hypothesis (>=5.7.1)"]
 
 [[package]]
 name = "pytest-cov"
-version = "2.11.1"
+version = "4.0.0"
 description = "Pytest plugin for measuring coverage."
 category = "dev"
 optional = false
-python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+python-versions = ">=3.6"
 
 [package.dependencies]
-coverage = ">=5.2.1"
+coverage = {version = ">=5.2.1", extras = ["toml"]}
 pytest = ">=4.6"
 
 [package.extras]
-testing = ["fields", "hunter", "process-tests (==2.0.2)", "six", "pytest-xdist", "virtualenv"]
+testing = ["fields", "hunter", "process-tests", "pytest-xdist", "six", "virtualenv"]
 
 [[package]]
 name = "pytest-dotenv"
@@ -554,7 +557,7 @@ idna = ">=2.5,<3"
 urllib3 = ">=1.21.1,<1.27"
 
 [package.extras]
-security = ["pyOpenSSL (>=0.14)", "cryptography (>=1.3.4)"]
+security = ["cryptography (>=1.3.4)", "pyOpenSSL (>=0.14)"]
 socks = ["PySocks (>=1.5.6,!=1.5.7)", "win-inet-pton"]
 
 [[package]]
@@ -614,7 +617,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, <4"
 
 [package.extras]
 brotli = ["brotlipy (>=0.6.0)"]
-secure = ["pyOpenSSL (>=0.14)", "cryptography (>=1.3.4)", "idna (>=2.0.0)", "certifi", "ipaddress"]
+secure = ["certifi", "cryptography (>=1.3.4)", "idna (>=2.0.0)", "ipaddress", "pyOpenSSL (>=0.14)"]
 socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 
 [[package]]
@@ -632,7 +635,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "ed2ec551d5fe8c02743ddec184ea28b31bb29699b44a0b8abc187d954ca2a08b"
+content-hash = "7deba88c4b8e17239d16cf0a678b753d8b0d55ef82893bb85538841c31b2165b"
 
 [metadata.files]
 aiohttp = [
@@ -988,8 +991,8 @@ pytest-asyncio = [
     {file = "pytest_asyncio-0.14.0-py3-none-any.whl", hash = "sha256:2eae1e34f6c68fc0a9dc12d4bea190483843ff4708d24277c41568d6b6044f1d"},
 ]
 pytest-cov = [
-    {file = "pytest-cov-2.11.1.tar.gz", hash = "sha256:359952d9d39b9f822d9d29324483e7ba04a3a17dd7d05aa6beb7ea01e359e5f7"},
-    {file = "pytest_cov-2.11.1-py2.py3-none-any.whl", hash = "sha256:bdb9fdb0b85a7cc825269a4c56b48ccaa5c7e365054b6038772c32ddcdc969da"},
+    {file = "pytest-cov-4.0.0.tar.gz", hash = "sha256:996b79efde6433cdbd0088872dbc5fb3ed7fe1578b68cdbba634f14bb8dd0470"},
+    {file = "pytest_cov-4.0.0-py3-none-any.whl", hash = "sha256:2feb1b751d66a8bd934e5edfa2e961d11309dc37b73b0eabe73b5945fee20f6b"},
 ]
 pytest-dotenv = [
     {file = "pytest-dotenv-0.5.2.tar.gz", hash = "sha256:2dc6c3ac6d8764c71c6d2804e902d0ff810fa19692e95fe138aefc9b1aa73732"},
@@ -1061,7 +1064,6 @@ requests = [
 requests-oauthlib = [
     {file = "requests-oauthlib-1.3.0.tar.gz", hash = "sha256:b4261601a71fd721a8bd6d7aa1cc1d6a8a93b4a9f5e96626f8e4d91e8beeaa6a"},
     {file = "requests_oauthlib-1.3.0-py2.py3-none-any.whl", hash = "sha256:7f71572defaecd16372f9006f33c2ec8c077c3cfa6f5911a9a90202beb513f3d"},
-    {file = "requests_oauthlib-1.3.0-py3.7.egg", hash = "sha256:fa6c47b933f01060936d87ae9327fead68768b69c6c9ea2109c48be30f2d4dbc"},
 ]
 six = [
     {file = "six-1.15.0-py2.py3-none-any.whl", hash = "sha256:8b74bedcbbbaca38ff6d7491d76f2b06b3592611af620f8426e82dddb04a5ced"},
